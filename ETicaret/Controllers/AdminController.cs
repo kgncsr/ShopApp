@@ -39,7 +39,6 @@ namespace ETicaret.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-
             var entity = new Product()
             {
                 Name = model.Name,
@@ -58,9 +57,7 @@ namespace ETicaret.WebUI.Controllers
 
             TempData["message"] = JsonConvert.SerializeObject(msg);
 
-
             return RedirectToAction("ProductList");
-
             }
             return View(model);
         }

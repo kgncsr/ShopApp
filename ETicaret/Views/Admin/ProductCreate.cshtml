@@ -6,9 +6,9 @@
 <div class="row">
     <div class="col-md-8">
         <form asp-controller="Admin" asp-action="ProductCreate" method="POST">
-            <div asp-validation-summary="All" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>@*hata mesajlarını toplu alıyoruz*@
             <div class="form-group row">
-                <label asp-for="Name" class="col-sm-2 col-form-label"></label>
+                <label asp-for="Name" class="col-sm-2 col-form-label"></label>@*//tag helperin yaptığı yarar id alanı name alanı ve value değerlerini modele göre bizim yerimize aktarıyor yani product model ıcındeki name alanına bakıyyor* ve name alanına göre id name value yi set ediyor *@
                 <div class="col-sm-10">
                     <input class="form-control" asp-for="Name">
                     <span asp-validation-for="Name" class="text-danger"></span>
