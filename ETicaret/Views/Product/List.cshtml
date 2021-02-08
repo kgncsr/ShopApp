@@ -1,0 +1,31 @@
+﻿@model ProductListViewModel //yol
+@* {
+        Layout="_Layoult2";
+    } *@
+@{//buranın layoultla alakası yok
+    var popularClass = Model.Products.Count > 2 ? "popular" : "";
+    var products = Model.Products;
+}
+
+
+@section Categories{
+    @await Component.InvokeAsync("Categories")
+}
+
+@if (products.Count == 0)
+{
+    @await Html.PartialAsync("_noproduct")
+}
+else
+{
+    <div class="row">
+        @foreach (var product in products)
+        {
+            <div class="col-md-4">
+                @await Html.PartialAsync("_product", product) @* dinamik olduğu için obje bejler bende product u veririm*@
+                @* Listeden gelen her product objesini _productcshtml e gönderiyoruz ve gönderdiğimiz obje product prodyccshtml tarafından karşılanıyor ve karşılanan bilgi içerinden modelname desc yazdırılır *@
+            </div>
+
+        }
+    </div>
+}
