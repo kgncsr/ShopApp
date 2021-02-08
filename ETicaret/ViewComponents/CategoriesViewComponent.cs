@@ -21,7 +21,7 @@ namespace ETicaret.ViewComponents
             if (RouteData.Values["category"] != null)
                 ViewBag.SelectedCategory = RouteData?.Values["category"];
 
-            return View(_categoryService.GetAll());
+            return View(_categoryService.GetAll());//
         }
     }
 }
