@@ -14,6 +14,9 @@ namespace ETicaret.Business.Concrete
         {
             _categoryRepository = categoryRepository;
         }
+
+     
+
         public void Create(Category entity)
         {
             _categoryRepository.Create(entity);
@@ -47,6 +50,12 @@ namespace ETicaret.Business.Concrete
         public void Update(Category entity)
         {
             _categoryRepository.Update(entity);
+        }
+
+        public string ErrorMessage { get; set; }
+        public bool Validation(Category entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ETicaret.Business.Abstract
 {
-    public interface ICategoryService
+    public interface ICategoryService : IValidator<Category>
     {
         Category GetById(int id);
         Category GetByIdWithProducts(int categoryId);

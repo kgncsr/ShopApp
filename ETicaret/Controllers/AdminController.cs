@@ -47,18 +47,14 @@ namespace ETicaret.WebUI.Controllers
                 Description = model.Description,
                 ImageUrl = model.ImageUrl
             };
-            _productService.Create(entity); //burası bizden Product tipinde bilgi bekliyor dolasıyla product bilgisini olusturcaz yukardaki gibi
 
-            var msg = new AlertMessage()
-            {
-                Message = $"{entity.Name} isimli ürün eklendi.",
-                AlertType = "success"
-            };
-
-            TempData["message"] = JsonConvert.SerializeObject(msg);
-
-            return RedirectToAction("ProductList");
+            if(_productService.Create(entity)) //burası bizden Product tipinde bilgi bekliyor dolasıyla product bilgisini olusturcaz yukardaki gibi
+                {
+                    CreateMessage("kayıt eklendi", "success");
+                    return RedirectToAction("ProductList");
+                }
             }
+            CreateMessage(_productService.ErrorMessage, "danger");
             return View(model);
         }
 
@@ -82,6 +78,8 @@ namespace ETicaret.WebUI.Controllers
                 Price = entity.Price,
                 Description = entity.Description,
                 ImageUrl = entity.ImageUrl,
+                IsApproved = entity.IsApproved,
+                IsHome = entity.IsHome,
                 SelectedCategories = entity.ProductCategories.Select(i => i.Category).ToList()//secilmis ürünle alakalı kategorileri listeye cevirdik ve selected categoriye attık
             };
             ViewBag.Categories = _categoryService.GetAll(); //tüm kategorileri getirdik istersek  model icinde tanımlayıp da getirebilirdik
@@ -94,33 +92,29 @@ namespace ETicaret.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-            var entity = _productService.GetById(model.ProductId);//modelin productıdsini buldum getirdim eski modeldekiyle yenisini değiştiricem
-            if (entity == null)
-            {
-                return NotFound();
+                var entity = _productService.GetById(model.ProductId);//modelin productıdsini buldum getirdim eski modeldekiyle yenisini değiştiricem
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+                entity.Name = model.Name;
+                entity.Price = model.Price;
+                entity.Url = model.Url;
+                entity.ImageUrl = model.ImageUrl;
+                entity.IsApproved = model.IsApproved;
+                entity.IsHome = model.IsHome;
+                entity.Description = model.Description;
+
+
+
+                if (_productService.Update(entity, categoryIds))
+                {
+                    CreateMessage("kayıt güncellendi", "success");//validation içerisinden ya da iş kuralından hata mesajı  gelecek
+                    return RedirectToAction("ProductList");
+                }
+                CreateMessage(_productService.ErrorMessage, "danger");
             }
-            entity.Name = model.Name;
-            entity.Price = model.Price;
-            entity.Url = model.Url;
-            entity.ImageUrl = model.ImageUrl;
-            entity.Description = model.Description;
-
-            _productService.Update(entity,categoryIds);
-
-          
-
-            var msg = new AlertMessage()
-            {
-                Message = $"{entity.Name} isimli ürün güncellendi.",
-                AlertType = "success"
-            };
-
-            TempData["message"] = JsonConvert.SerializeObject(msg);
-            //{ "Message":"samsung isimli ürün eklendi","AlertType":"Succes"}
-
-            return RedirectToAction("ProductList");
-            }
-            ViewBag.Categories = _categoryService.GetAll();
+                ViewBag.Categories = _categoryService.GetAll();
             return View(model);
         }
 
@@ -274,6 +268,17 @@ namespace ETicaret.WebUI.Controllers
             return Redirect("/admin/categories/"+categoryId);
 
 
+        }
+        //---message---
+        private void CreateMessage(string message, string alerttype)
+        {
+            var msg = new AlertMessage()
+            {
+                Message = message,
+                AlertType = alerttype
+            };
+
+            TempData["message"] = JsonConvert.SerializeObject(msg);
         }
     }
 }

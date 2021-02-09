@@ -15,14 +15,23 @@ namespace ETicaret.Business.Concrete
             _productRepository = productRepository;
         }
 
-        public void Create(Product product)
+ 
+
+        public bool Create(Product entity)
         {
-            _productRepository.Create(product);
+            //if (entity.Name.Length == 0) {} tek tek metot ıcınde hazırlayabiliriz ya da genel bir interface üzerinden yaparız
+            if (Validation(entity))
+            {
+                _productRepository.Create(entity);//validation dan dönen sonuc true ise ekleme işlemini yap
+                return true;
+            }
+            return false;
+            
         }
 
-        public void Delete(Product product)
+        public void Delete(Product entity)
         {
-            _productRepository.Delete(product);
+            _productRepository.Delete(entity);
         }
 
         public List<Product> GetAll()
@@ -40,9 +49,10 @@ namespace ETicaret.Business.Concrete
             return _productRepository.GetByIdWithCategories(id);
         }
 
-        public int GetCountByCategory(string category)
+        public int GetCountByCategory(string entity)
         {
-            return _productRepository.GetCountByCategory(category);
+
+            return _productRepository.GetCountByCategory(entity);
         }
 
         public List<Product> GetHomePageProducts()
@@ -65,14 +75,40 @@ namespace ETicaret.Business.Concrete
             return _productRepository.GetSearchResult(searchString);
         }
 
-        public void Update(Product entity)
+
+        public bool Update(Product entity, int[] categoryIds)
         {
-            _productRepository.Update(entity);
+            if (Validation(entity))
+            {
+                if (categoryIds.Length == 0)
+                {
+                    ErrorMessage += "Ürün için en az bir kategori secmelisiniz.";
+                    return false;
+                }
+                _productRepository.Update(entity, categoryIds);
+                return true;
+            }
+            return false;
+           
         }
 
-        public void Update(Product entity, int[] categoryIds)
+        public string ErrorMessage { get; set; }
+        public bool Validation(Product entity)
         {
-            _productRepository.Update(entity, categoryIds);
+            var isValid = true;//başta her sey yolunda
+            if (string.IsNullOrEmpty(entity.Name))
+            {
+                ErrorMessage += "ürün ismi girmelisiniz.\n";
+                isValid = false;
+            }
+
+            if (entity.Price < 0)
+            {
+                ErrorMessage += "ürün fiyatı negatif olamaz.\n";
+                isValid = false;
+            }
+
+            return isValid;
         }
     }
 }

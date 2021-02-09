@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ETicaret.Business.Abstract
 {
-    public interface IProductService
+    public interface IProductService : IValidator<Product>//her bir servis mutalaka validotoru implement etmek zorunda
     {
          Product GetById(int id);
          Product GetByIdWithCategories(int id);
@@ -14,9 +14,9 @@ namespace ETicaret.Business.Abstract
          List<Product> GetAll();
          List<Product> GetHomePageProducts();
          List<Product> GetSearchResult(string searchString);
-         void Create(Product product);
-         void Update(Product entity, int[] categoryIds);
+         bool Create(Product entity);
+         bool Update(Product entity, int[] categoryIds);
          void Delete(Product product);
-         int GetCountByCategory(string category);
+         int GetCountByCategory(string entity);
     }
 }
