@@ -18,7 +18,7 @@
 
     <main class="my-3">
         <div class="container">
-          
+
 
             @if (TempData["message"] != null)
             {
@@ -27,7 +27,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="alert alert-@message.AlertType">
-                           @message.Message
+                            @message.Message
                         </div>
                     </div>
                 </div>
@@ -43,8 +43,10 @@
 
 
 
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <script src="~/jquery-validate/jquery.validate.min.js"></script>
+    <script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>@*Bu kütüphaneler sayesinde validation kontrollleri client tarafında yapıldı*@
     @RenderSection("Scripts", false)
 
 </body>
